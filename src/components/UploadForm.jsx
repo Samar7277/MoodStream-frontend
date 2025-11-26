@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../config";
 
 export default function UploadForm({ onUploaded }) {
   const navigate = useNavigate();
@@ -40,20 +41,21 @@ export default function UploadForm({ onUploaded }) {
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData?.session?.access_token;
 
-      const res = await fetch("http://localhost:4000/api/upload-track", {
+      const res = await fetch(`${BACKEND_URL}/api/upload-track`, {
         method: "POST",
         body: form,
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
 
-      let bodyText = await res.text();
+      let text = await res.text();
       let json = null;
+
       try {
-        json = JSON.parse(bodyText);
+        json = JSON.parse(text);
       } catch (err) {
         console.error("Could not parse JSON:", err);
-        console.log("Raw backend:", bodyText);
-        setMsg("Backend did not return JSON. Check console.");
+        console.log("Raw backend:", text);
+        setMsg("Backend returned non-JSON. Check console.");
         setLoading(false);
         return;
       }
@@ -88,7 +90,6 @@ export default function UploadForm({ onUploaded }) {
                 </p>
               </div>
 
-              {/* MoodStream Logo Redirect */}
               <div
                 onClick={() => navigate("/")}
                 className="rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 p-1 cursor-pointer hover:scale-110 transition"
@@ -122,7 +123,6 @@ export default function UploadForm({ onUploaded }) {
                     <input type="file" accept="audio/*" onChange={onAudioChange} className="hidden" />
                     <span>{audioFile ? "Change audio" : "Select audio"}</span>
                   </label>
-
                   {audioFile && <div className="text-xs text-slate-300">{audioFile.name}</div>}
                 </div>
               </div>
@@ -134,14 +134,9 @@ export default function UploadForm({ onUploaded }) {
                     <input type="file" accept="image/*" onChange={onCoverChange} className="hidden" />
                     <span>{coverFile ? "Change cover" : "Select cover"}</span>
                   </label>
-
                   {coverFile && (
                     <div className="w-28 h-28 rounded-lg overflow-hidden bg-indigo-700/30 border border-white/10">
-                      <img
-                        src={URL.createObjectURL(coverFile)}
-                        alt="cover preview"
-                        className="w-full h-full object-cover"
-                      />
+                      <img src={URL.createObjectURL(coverFile)} alt="cover preview" className="w-full h-full object-cover" />
                     </div>
                   )}
                 </div>
