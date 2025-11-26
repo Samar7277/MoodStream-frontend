@@ -47,7 +47,7 @@ export default function UploadForm({ onUploaded }) {
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
 
-      let text = await res.text();
+      const text = await res.text();
       let json = null;
 
       try {
@@ -117,26 +117,48 @@ export default function UploadForm({ onUploaded }) {
               />
 
               <div>
-                <label className="block text-sm mb-2 text-slate-300">Audio file</label>
+                <label className="block text-sm mb-2 text-slate-300">
+                  Audio file
+                </label>
                 <div className="flex items-center gap-3">
                   <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-700/30 cursor-pointer text-sm border border-white/10">
-                    <input type="file" accept="audio/*" onChange={onAudioChange} className="hidden" />
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      onChange={onAudioChange}
+                      className="hidden"
+                    />
                     <span>{audioFile ? "Change audio" : "Select audio"}</span>
                   </label>
-                  {audioFile && <div className="text-xs text-slate-300">{audioFile.name}</div>}
+                  {audioFile && (
+                    <div className="text-xs text-slate-300">
+                      {audioFile.name}
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm mb-2 text-slate-300">Cover (optional)</label>
+                <label className="block text-sm mb-2 text-slate-300">
+                  Cover (optional)
+                </label>
                 <div className="flex items-start gap-4">
                   <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-700/30 cursor-pointer text-sm border border-white/10">
-                    <input type="file" accept="image/*" onChange={onCoverChange} className="hidden" />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={onCoverChange}
+                      className="hidden"
+                    />
                     <span>{coverFile ? "Change cover" : "Select cover"}</span>
                   </label>
                   {coverFile && (
                     <div className="w-28 h-28 rounded-lg overflow-hidden bg-indigo-700/30 border border-white/10">
-                      <img src={URL.createObjectURL(coverFile)} alt="cover preview" className="w-full h-full object-cover" />
+                      <img
+                        src={URL.createObjectURL(coverFile)}
+                        alt="cover preview"
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   )}
                 </div>
@@ -157,10 +179,13 @@ export default function UploadForm({ onUploaded }) {
           <div className="mt-6 text-sm text-slate-300">
             Tip: cover images look best at square 1:1 ratio.
             <br />
-            <span className="text-indigo-400">Tap the M logo anytime to return Home</span>
+            <span className="text-indigo-400">
+              Tap the M logo anytime to return Home
+            </span>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
